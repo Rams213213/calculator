@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<style>
+  .button {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    margin: 5px;
+    background-color: rgb(255, 145, 0);
+    border-radius: 100px;
+    border: none;
+  }
+
+  .text {
+    width: 200px;
+    height: 50px;
+    font-size: 20px;
+    margin: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+  }
+</style>
+
+<head>
+  <title>Calculator</title>
+</head>
+
+<body>
+  <div id="display" class="text"></div>
+  <button onclick="document.getElementById('display').innerText += '1'" class="button">1</button>
+  <button onclick="document.getElementById('display').innerText += '2'" class="button">2</button>
+  <button onclick="document.getElementById('display').innerText += '3'" class="button">3</button>
+  <h1></h1>
+  <button onclick="document.getElementById('display').innerText += '4'" class="button">4</button>
+  <button onclick="document.getElementById('display').innerText += '5'" class="button">5</button>
+  <button onclick="document.getElementById('display').innerText += '6'" class="button">6</button>
+  <h1></h1>
+  <button onclick="document.getElementById('display').innerText += '7'" class="button">7</button>
+  <button onclick="document.getElementById('display').innerText += '8'" class="button">8</button>
+  <button onclick="document.getElementById('display').innerText += '9'" class="button">9</button>
+  <h1></h1>
+  <button onclick="document.getElementById('display').innerText += '0'" class="button">0</button>
+  <button onclick="document.getElementById('display').innerText += '+'" class="button">+</button>
+  <button onclick="document.getElementById('display').innerText += '-'" class="button">-</button>
+  <button onclick="document.getElementById('display').innerText += '*'" class="button">*</button>
+  <button onclick="document.getElementById('display').innerText += '/'" class="button">/</button>
+  <button onclick="document.getElementById('display').innerText = eval(document.getElementById('display').innerText)"
+    class="button">=</button>
+  <button onclick="
+    if(document.getElementById('delete').innerText === 'C'){
+        document.getElementById('display').innerText = document.getElementById('display').innerText.slice(0, -1);
+        document.getElementById('delete').innerText = 'AC';
+    } else {
+      document.getElementById('display').innerText = '';
+      document.getElementById('delete').innerText = 'C';
+    }
+     " id="delete" class="button">C</button>
+  <button
+    onclick="document.getElementById('display').innerText = document.getElementById('display').innerText.slice(0, -1);"
+    class="button">DEL</button>
+</body>
+
+
+</html>
