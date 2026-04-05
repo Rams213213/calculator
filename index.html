@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<style>
+  .button {
+    width: 15vh;
+    height: 12vh;
+    font-size: 40px;
+    margin: 5px;
+    background-color: rgb(255, 145, 0);
+    border-radius: 100px;
+    border: none;
+  }
+
+  .text {
+    width: calc(100vw - 50px);
+    height: 27.5vh;
+    font-size: 15vh;
+    margin: 5px;
+    padding: 5px;
+    text-align: right;
+    border-radius: 5px;
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    white-space: nowrap;
+  }
+
+  .calculatorType {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    height: 30px;
+    background-color: rgb(255, 145, 0);
+    border: none;
+    border-radius: 5px;
+  }
+
+  .kaypad {
+    text-align: right;
+  }
+
+  h1 {
+    margin: 0;
+  }
+</style>
+
+<head>
+  <title>Calculator</title>
+</head>
+
+<body style="background-color: rgb(0, 0, 0);">
+  <select onchange="calculatorType(this.value)" class="calculatorType">
+    <option value="basic">basic</option>
+    <option value="scientific">scientific</option>
+  </select>
+  <div id="display" class="text"></div>
+  <div class="kaypad" id="kaypad">
+    <button onclick="press('C')" class="button">C</button>
+    <button onclick="press('DEL')" class="button">DEL</button>
+    <button onclick="press('()')" class="button">()</button>
+    <button onclick="press('+')" class="button">+</button>
+    <h1></h1>
+    <button onclick="press(1)" class="button">1</button>
+    <button onclick="press(2)" class="button">2</button>
+    <button onclick="press(3)" class="button">3</button>
+    <button onclick="press('-')" class="button">-</button>
+    <h1></h1>
+    <button onclick="press(4)" class="button">4</button>
+    <button onclick="press(5)" class="button">5</button>
+    <button onclick="press(6)" class="button">6</button>
+    <button onclick="press('*')" class="button">*</button>
+    <h1></h1>
+    <button onclick="press(7)" class="button">7</button>
+    <button onclick="press(8)" class="button">8</button>
+    <button onclick="press(9)" class="button">9</button>
+    <button onclick="press('/')" class="button">/</button>
+    <h1></h1>
+    <button onclick="press('+/-')" class="button">+/-</button>
+    <button onclick="press(0)" class="button">0</button>
+    <button onclick="press('.')" class="button">.</button>
+    <button onclick="press('=')" class="button">=</button>
+  </div>
+</body>
+<script>
+  let math = '';
+  let lastChar = '';
+  let lastNum = '';
+  let bracketCount = 0;
+  function press(char) {
+    if (typeof char === "number" || char === '.') {
+      document.getElementById('display').innerText += char;
+      math += char;
+    } else if (char === '+' || char === '-' || char === '*' || char === '/') {
+      lastChar = document.getElementById('display').innerText.charAt(document.getElementById('display').innerText.length - 1);
+      if (lastChar === '+' || lastChar === '-' || lastChar === '*' || lastChar === '/') {
+        document.getElementById('display').innerText = document.getElementById('display').innerText.slice(0, -1) + char;
+        math = math.slice(0, -1) + char;
+      } else {
+        document.getElementById('display').innerText += char;
+        math += char;
+      }
+    } else if (char === '()') {
+      lastChar = document.getElementById('display').innerText.charAt(document.getElementById('display').innerText.length - 1);
+      if (lastChar === '+' || lastChar === '-' || lastChar === '*' || lastChar === '/' || lastChar === '(') {
+        document.getElementById('display').innerText += '(';
+        math += '(';
+        bracketCount++;
+      } else if (bracketCount > 0) {
+        document.getElementById('display').innerText += ')';
+        math += ')';
+        bracketCount--;
+      } else {
+        return;
+      }
+    } else if (char === '+/-') {
+      let lastNumStart = [...document.getElementById('display').innerText.matchAll(/[+\-\/*(]/g)].at(-1)?.index + 1;
+      document.getElementById('display').innerText = document.getElementById('display').innerText.slice(0, lastNumStart) + '(-' + document.getElementById('display').innerText.slice(lastNumStart);
+      math = math.slice(0, lastNumStart) + '(-' + math.slice(lastNumStart);
+      bracketCount++;
+    } else if (char === 'sqrt') {
+      document.getElementById('display').innerText += '√(';
+      math += 'Math.sqrt(';
+      bracketCount++;
+    } else if (char === 'C') {
+      document.getElementById('display').innerText = '';
+      math = '';
+    } else if (char === 'DEL') {
+      document.getElementById('display').innerText = document.getElementById('display').innerText.slice(0, -1);
+      math = math.slice(0, -1);
+    } else if (char === 'DEL') {
+      document.getElementById('display').innerText = document.getElementById('display').innerText.slice(0, -1);
+      math = math.slice(0, -1);
+    } else if (char === '=') {
+      document.getElementById('display').innerText = eval(math);
+    }
+  }
+  function calculatorType(type) {
+    if (type === 'basic') {
+      document.getElementById('kaypad').innerHTML = `
+        <button onclick = "press('C')" class="button" > C</button >
+    <button onclick="press('DEL')" class="button">DEL</button>
+    <button onclick="press('()')" class="button">()</button>
+    <button onclick="press('+')" class="button">+</button>
+    <h1></h1>
+    <button onclick="press(1)" class="button">1</button>
+    <button onclick="press(2)" class="button">2</button>
+    <button onclick="press(3)" class="button">3</button>
+    <button onclick="press('-')" class="button">-</button>
+    <h1></h1>
+    <button onclick="press(4)" class="button">4</button>
+    <button onclick="press(5)" class="button">5</button>
+    <button onclick="press(6)" class="button">6</button>
+    <button onclick="press('*')" class="button">*</button>
+    <h1></h1>
+    <button onclick="press(7)" class="button">7</button>
+    <button onclick="press(8)" class="button">8</button>
+    <button onclick="press(9)" class="button">9</button>
+    <button onclick="press('/')" class="button">/</button>
+    <h1></h1>
+    <button onclick="press('+/-')" class="button">+/-</button>
+    <button onclick="press(0)" class="button">0</button>
+    <button onclick="press('.')" class="button">.</button>
+    <button onclick="press('=')" class="button">=</button>`;
+    } else {
+      document.getElementById('kaypad').innerHTML = `
+    <button onclick="press('sqrt')" class="button">√</button>
+    <button onclick="press('C')" class="button">C</button>
+    <button onclick="press('DEL')" class="button">DEL</button>
+    <button onclick="press('()')" class="button">()</button>
+    <button onclick="press('+')" class="button">+</button>
+    <h1></h1>
+    <button onclick="press(1)" class="button">1</button>
+    <button onclick="press(2)" class="button">2</button>
+    <button onclick="press(3)" class="button">3</button>
+    <button onclick="press('-')" class="button">-</button>
+    <h1></h1>
+    <button onclick="press(4)" class="button">4</button>
+    <button onclick="press(5)" class="button">5</button>
+    <button onclick="press(6)" class="button">6</button>
+    <button onclick="press('*')" class="button">*</button>
+    <h1></h1>
+    <button onclick="press(7)" class="button">7</button>
+    <button onclick="press(8)" class="button">8</button>
+    <button onclick="press(9)" class="button">9</button>
+    <button onclick="press('/')" class="button">/</button>
+    <h1></h1>
+    <button onclick="press('+/-')" class="button">+/-</button>
+    <button onclick="press(0)" class="button">0</button>
+    <button onclick="press('.')" class="button">.</button>
+    <button onclick="press('=')" class="button">=</button>
+    <button onclick="press('|')" class="button">|</button>`;
+    }
+  }
+
+</script>
+
+</html>
