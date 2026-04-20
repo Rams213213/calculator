@@ -6,10 +6,16 @@
     height: 12vh;
     font-size: 40px;
     color: rgb(0, 0, 0);
-    margin: 5px;
+    margin: 0.5vh;
     background-color: rgb(255, 145, 0);
     border-radius: 100px;
     border: none;
+    align-items: center;
+  }
+
+  .button:active {
+    background-color: rgb(255, 175, 0);
+    transform: scale(1.05);
   }
 
   .text {
@@ -202,9 +208,6 @@
     } else if (char === '=') {
       if (bracketCount.some(count => count !== 0) || absoluteCount !== 0 || powerLayer !== 0) {
         alert('Please close all brackets and absolute value signs before calculating.');
-        alert(absoluteCount);
-        alert(powerLayer);
-        alert(bracketCount);
         return;
       }
       document.getElementById('display').innerHTML = eval(math);
