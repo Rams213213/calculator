@@ -18,6 +18,35 @@
     transform: scale(1.05);
   }
 
+  .buttonSet {
+    width: 13vh;
+    height: 10vh;
+    font-size: 40px;
+    color: rgb(0, 0, 0);
+    margin: 0.5vh;
+    background-color: rgb(255, 145, 0);
+    border-radius: 100px;
+    border: none;
+    align-items: center;
+    cursor: grab;
+  }
+
+  .buttonSet:active {
+    cursor: grabbing;
+  }
+
+  .setButton {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    height: 5vh;
+    width: 10vh;
+    background-color: rgb(255, 145, 0);
+    font-size: 2vh;
+    border: none;
+    border-radius: 5px;
+  }
+
   .text {
     width: calc(100vw - 50px);
     height: 27.5vh;
@@ -54,11 +83,12 @@
   <title>Calculator</title>
 </head>
 
-<body style="background-color: rgb(0, 0, 0);">
+<body style="background-color: rgb(0, 0, 0);" id="body">
   <select onchange="calculatorType(this.value)" class="calculatorType">
     <option value="basic" selected>basic</option>
     <option value="scientific">scientific</option>
   </select>
+  <button onclick="openSettings()" class="setButton">settings</button>
   <div id="display" class="text"></div>
   <div class="kaypad" id="kaypad">
     <button onclick="press('C')" class="button">C</button>
@@ -94,8 +124,48 @@
   let bracketCount = [0];
   let absoluteCount = 0;
   let powerLayer = 0;
+  let allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', '*', '/', '.', 'Enter', 'Backspace'];
+  window.addEventListener('keydown', (event) => {
+    if (allowedKeys.includes(event.key)) {
+      if (event.key === 'Enter') {
+        press('=');
+      } else if (event.key === 'Backspace') {
+        press('DEL');
+      } else {
+        press(event.key);
+      }
+    }
+  });
+  function openSettings() {
+    document.getElementById('body').innerHTML = `
+    <button onclick="press('sqrt')" class="buttonSet" draggable="true">√</button>
+    <button onclick="press('C')" class="buttonSet" draggable="true">C</button>
+    <button onclick="press('DEL')" class="buttonSet" draggable="true">DEL</button>
+    <button onclick="press('()')" class="buttonSet" draggable="true">()</button>
+    <button onclick="press('+')" class="buttonSet" draggable="true">+</button>
+    <button onclick="press('|')" class="buttonSet" draggable="true">|x|</button>
+    <button onclick="press(7)" class="buttonSet" draggable="true">7</button>
+    <button onclick="press(8)" class="buttonSet" draggable="true">8</button>
+    <button onclick="press(9)" class="buttonSet" draggable="true">9</button>
+    <button onclick="press('-')" class="buttonSet" draggable="true">-</button>
+    <button onclick="press('^2')" class="buttonSet" draggable="true">x²</button>
+    <button onclick="press(4)" class="buttonSet" draggable="true">4</button>
+    <button onclick="press(5)" class="buttonSet" draggable="true">5</button>
+    <button onclick="press(6)" class="buttonSet" draggable="true">6</button>
+    <button onclick="press('*')" class="buttonSet" draggable="true">*</button>
+    <button onclick="press('^3')" class ="buttonSet" draggable="true">x³</button>
+    <button onclick="press(1)" class="buttonSet" draggable="true">1</button>
+    <button onclick="press(2)" class="buttonSet" draggable="true">2</button>
+    <button onclick="press(3)" class="buttonSet" draggable="true">3</button>
+    <button onclick="press('/')" class="buttonSet" draggable="true">/</button>
+    <button onclick="press('^y')" class="buttonSet" draggable="true">x<sup>y</sup></button>
+    <button onclick="press('+/-')" class="buttonSet" draggable="true">+/-</button>
+    <button onclick="press(0)" class="buttonSet" draggable="true">0</button>
+    <button onclick="press('.')" class="buttonSet" draggable="true">.</button>
+    <button onclick="press('=')" class="buttonSet" draggable="true">=</button>`;
+  }
   function press(char) {
-    if (typeof char === "number" || char === '.') {
+    if ((!isNaN(char) && char !== null && char !== ' ') || char === '.') {
       document.getElementById('display').innerHTML += char;
       math += char;
     } else if (char === '+' || char === '-' || char === '*' || char === '/') {
