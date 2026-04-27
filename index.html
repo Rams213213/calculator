@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html>
 <style>
+  body,
+  html {
+    height: 100%;
+    overflow: hidden;
+    /* Zákaz scrollování celé stránky */
+  }
+
   .button {
     width: 15vh;
     height: 12vh;
@@ -35,7 +42,25 @@
     cursor: grabbing;
   }
 
-  .setButton {
+  .GhostButton {
+    width: 15vh;
+    height: 12vh;
+    font-size: 40px;
+    color: rgb(255, 255, 255);
+    /* Barva textu (pokud tam nějaký bude) */
+    margin: 0.5vh;
+    background-color: transparent;
+    /* Průhledné pozadí */
+    border-radius: 100px;
+
+    /* OPRAVA: Musíš definovat tloušťku a styl, aby byl vidět */
+    border: 2px dashed rgb(105, 105, 105);
+
+    display: inline-flex;
+    justify-content: center;
+  }
+
+  .settingButton {
     position: absolute;
     top: 5px;
     right: 5px;
@@ -45,6 +70,19 @@
     font-size: 2vh;
     border: none;
     border-radius: 5px;
+  }
+
+  .grid {
+    display: grid;
+    /* Levý panel 35vh (dost pro 2 sloupce), pravý panel zbytek */
+    grid-template-columns: 1fr 1fr;
+    width: 35vh;
+    height: 100vh;
+    /* Omezíme výšku, aby fungoval scroll */
+    overflow-y: auto;
+    z-index: 2;
+    position: absolute;
+    padding: 1vh;
   }
 
   .text {
@@ -74,8 +112,21 @@
     text-align: right;
   }
 
+  .ghostKeypad {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    text-align: right;
+    z-index: 1;
+    pointer-events: none;
+  }
+
   h1 {
     margin: 0;
+  }
+
+  .inDrag {
+    color: blue;
   }
 </style>
 
@@ -88,7 +139,7 @@
     <option value="basic" selected>basic</option>
     <option value="scientific">scientific</option>
   </select>
-  <button onclick="openSettings()" class="setButton">settings</button>
+  <button onclick="openSettings()" class="settingButton">settings</button>
   <div id="display" class="text"></div>
   <div class="kaypad" id="kaypad">
     <button onclick="press('C')" class="button">C</button>
@@ -125,6 +176,16 @@
   let absoluteCount = 0;
   let powerLayer = 0;
   let allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', '*', '/', '.', 'Enter', 'Backspace'];
+  let draggedButton = null;
+  addEventListener('dragstart', (event) => {
+    draggedButton = event.target;
+  });
+  addEventListener('dragenter', (event) => {
+    if (event.target.classList.contains('GhostButton')) {
+    } else {
+      return
+    }
+  });
   window.addEventListener('keydown', (event) => {
     if (allowedKeys.includes(event.key)) {
       if (event.key === 'Enter') {
@@ -138,6 +199,8 @@
   });
   function openSettings() {
     document.getElementById('body').innerHTML = `
+    <div class="grid">
+    <div style="height: 2vh; grid-column: span 2;"></div>
     <button onclick="press('sqrt')" class="buttonSet" draggable="true">√</button>
     <button onclick="press('C')" class="buttonSet" draggable="true">C</button>
     <button onclick="press('DEL')" class="buttonSet" draggable="true">DEL</button>
@@ -162,7 +225,60 @@
     <button onclick="press('+/-')" class="buttonSet" draggable="true">+/-</button>
     <button onclick="press(0)" class="buttonSet" draggable="true">0</button>
     <button onclick="press('.')" class="buttonSet" draggable="true">.</button>
-    <button onclick="press('=')" class="buttonSet" draggable="true">=</button>`;
+    <button onclick="press('=')" class="buttonSet" draggable="true">=</button>
+    <h1></h1>
+    <div style="height: 5vh; grid-column: span 2;"></div>
+    </div>
+    <div class="ghostKeypad" id="kaypad">
+      <button class="GhostButton" id="1.1"></button>
+      <button class="GhostButton" id="1.2"></button>
+      <button class="GhostButton" id="1.3"></button>
+      <button class="GhostButton" id="1.4"></button>
+      <button class="GhostButton" id="1.5"></button>
+      <button class="GhostButton" id="1.6"></button>
+      <button class="GhostButton" id="1.7"></button>
+      <button class="GhostButton" id="1.8"></button>
+      <button class="GhostButton" id="1.9"></button>
+      <h1></h1>
+      <button class="GhostButton" id="2.1"></button>
+      <button class="GhostButton" id="2.2"></button>
+      <button class="GhostButton" id="2.3"></button>
+      <button class="GhostButton" id="2.4"></button>
+      <button class="GhostButton" id="2.5"></button>
+      <button class="GhostButton" id="2.6"></button>
+      <button class="GhostButton" id="2.7"></button>
+      <button class="GhostButton" id="2.8"></button>
+      <button class="GhostButton" id="2.9"></button>
+      <h1></h1>
+      <button class="GhostButton" id="3.1"></button>
+      <button class="GhostButton" id="3.2"></button>
+      <button class="GhostButton" id="3.3"></button>
+      <button class="GhostButton" id="3.4"></button>
+      <button class="GhostButton" id="3.5"></button>
+      <button class="GhostButton" id="3.6"></button>
+      <button class="GhostButton" id="3.7"></button>
+      <button class="GhostButton" id="3.8"></button>
+      <button class="GhostButton" id="3.9"></button>
+      <h1></h1>
+      <button class="GhostButton" id="4.1"></button>
+      <button class="GhostButton" id="4.2"></button>
+      <button class="GhostButton" id="4.3"></button>
+      <button class="GhostButton" id="4.4"></button>
+      <button class="GhostButton" id="4.5"></button>
+      <button class="GhostButton" id="4.6"></button>
+      <button class="GhostButton" id="4.7"></button>
+      <button class="GhostButton" id="4.8"></button>
+      <button class="GhostButton" id="4.9"></button>
+      <h1></h1>
+      <button class="GhostButton" id="5.1"></button>
+      <button class="GhostButton" id="5.2"></button>
+      <button class="GhostButton" id="5.3"></button>
+      <button class="GhostButton" id="5.4"></button>
+      <button class="GhostButton" id="5.5"></button>
+      <button class="GhostButton" id="5.6"></button>
+      <button class="GhostButton" id="5.7"></button>
+      <button class="GhostButton" id="5.8"></button>
+      <button class="GhostButton" id="5.9"></button>`;
   }
   function press(char) {
     if ((!isNaN(char) && char !== null && char !== ' ') || char === '.') {
