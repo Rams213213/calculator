@@ -1,134 +1,9 @@
 <!DOCTYPE html>
 <html>
-<style>
-  body,
-  html {
-    height: 100%;
-    overflow: hidden;
-    /* Zákaz scrollování celé stránky */
-  }
 
-  .button {
-    width: 15vh;
-    height: 12vh;
-    font-size: 40px;
-    color: rgb(0, 0, 0);
-    margin: 0.5vh;
-    background-color: rgb(255, 145, 0);
-    border-radius: 100px;
-    border: none;
-    align-items: center;
-  }
-
-  .button:active {
-    background-color: rgb(255, 175, 0);
-    transform: scale(1.05);
-  }
-
-  .buttonSet {
-    width: 13vh;
-    height: 10vh;
-    font-size: 40px;
-    color: rgb(0, 0, 0);
-    margin: 0.5vh;
-    background-color: rgb(255, 145, 0);
-    border-radius: 100px;
-    border: none;
-    align-items: center;
-    cursor: grab;
-  }
-
-  .buttonSet:active {
-    cursor: grabbing;
-  }
-
-  .GhostButton {
-    width: 15vh;
-    height: 12vh;
-    font-size: 40px;
-    color: rgb(255, 255, 255);
-    /* Barva textu (pokud tam nějaký bude) */
-    margin: 0.5vh;
-    background-color: transparent;
-    /* Průhledné pozadí */
-    border-radius: 100px;
-
-    /* OPRAVA: Musíš definovat tloušťku a styl, aby byl vidět */
-    border: 2px dashed rgb(105, 105, 105);
-
-    display: inline-flex;
-    justify-content: center;
-  }
-
-  .settingButton {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    height: 5vh;
-    width: 10vh;
-    background-color: rgb(255, 145, 0);
-    font-size: 2vh;
-    border: none;
-    border-radius: 5px;
-  }
-
-  .grid {
-    display: grid;
-    /* Levý panel 35vh (dost pro 2 sloupce), pravý panel zbytek */
-    grid-template-columns: 1fr 1fr;
-    width: 35vh;
-    height: 100vh;
-    /* Omezíme výšku, aby fungoval scroll */
-    overflow-y: auto;
-    z-index: 2;
-    position: absolute;
-    padding: 1vh;
-  }
-
-  .text {
-    width: calc(100vw - 50px);
-    height: 27.5vh;
-    font-size: 15vh;
-    margin: 5px;
-    padding: 5px;
-    text-align: right;
-    border-radius: 5px;
-    background-color: rgb(0, 0, 0);
-    color: rgb(255, 255, 255);
-    white-space: nowrap;
-  }
-
-  .calculatorType {
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    height: 30px;
-    background-color: rgb(255, 145, 0);
-    border: none;
-    border-radius: 5px;
-  }
-
-  .kaypad {
-    text-align: right;
-  }
-
-  .ghostKeypad {
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
-    text-align: right;
-    z-index: 1;
-    pointer-events: none;
-  }
-
-  h1 {
-    margin: 0;
-  }
-
-  .inDrag {
-    color: blue;
-  }
-</style>
+<head>
+  <link rel="stylesheet" href="style.css">
+</head>
 
 <head>
   <title>Calculator</title>
@@ -177,8 +52,9 @@
   let powerLayer = 0;
   let allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', '*', '/', '.', 'Enter', 'Backspace'];
   let draggedButton = null;
-  addEventListener('dragstart', (event) => {
-    draggedButton = event.target;
+  let potencialyDraggedButton = document.getElementsByClassName('buttonSet');
+  document.getElementsByClassName('buttonSet').addEventListener('mousedown', (event) => {
+    alert('test');
   });
   addEventListener('dragenter', (event) => {
     if (event.target.classList.contains('GhostButton')) {
@@ -201,34 +77,35 @@
     document.getElementById('body').innerHTML = `
     <div class="grid">
     <div style="height: 2vh; grid-column: span 2;"></div>
-    <button onclick="press('sqrt')" class="buttonSet" draggable="true">√</button>
-    <button onclick="press('C')" class="buttonSet" draggable="true">C</button>
-    <button onclick="press('DEL')" class="buttonSet" draggable="true">DEL</button>
-    <button onclick="press('()')" class="buttonSet" draggable="true">()</button>
-    <button onclick="press('+')" class="buttonSet" draggable="true">+</button>
-    <button onclick="press('|')" class="buttonSet" draggable="true">|x|</button>
-    <button onclick="press(7)" class="buttonSet" draggable="true">7</button>
-    <button onclick="press(8)" class="buttonSet" draggable="true">8</button>
-    <button onclick="press(9)" class="buttonSet" draggable="true">9</button>
-    <button onclick="press('-')" class="buttonSet" draggable="true">-</button>
-    <button onclick="press('^2')" class="buttonSet" draggable="true">x²</button>
-    <button onclick="press(4)" class="buttonSet" draggable="true">4</button>
-    <button onclick="press(5)" class="buttonSet" draggable="true">5</button>
-    <button onclick="press(6)" class="buttonSet" draggable="true">6</button>
-    <button onclick="press('*')" class="buttonSet" draggable="true">*</button>
-    <button onclick="press('^3')" class ="buttonSet" draggable="true">x³</button>
-    <button onclick="press(1)" class="buttonSet" draggable="true">1</button>
-    <button onclick="press(2)" class="buttonSet" draggable="true">2</button>
-    <button onclick="press(3)" class="buttonSet" draggable="true">3</button>
-    <button onclick="press('/')" class="buttonSet" draggable="true">/</button>
-    <button onclick="press('^y')" class="buttonSet" draggable="true">x<sup>y</sup></button>
-    <button onclick="press('+/-')" class="buttonSet" draggable="true">+/-</button>
-    <button onclick="press(0)" class="buttonSet" draggable="true">0</button>
-    <button onclick="press('.')" class="buttonSet" draggable="true">.</button>
-    <button onclick="press('=')" class="buttonSet" draggable="true">=</button>
+    <button onclick="press('sqrt')" class="buttonSet">√</button>
+    <button onclick="press('C')" class="buttonSet">C</button>
+    <button onclick="press('DEL')" class="buttonSet">DEL</button>
+    <button onclick="press('()')" class="buttonSet">()</button>
+    <button onclick="press('+')" class="buttonSet">+</button>
+    <button onclick="press('|')" class="buttonSet">|x|</button>
+    <button onclick="press(7)" class="buttonSet">7</button>
+    <button onclick="press(8)" class="buttonSet">8</button>
+    <button onclick="press(9)" class="buttonSet">9</button>
+    <button onclick="press('-')" class="buttonSet">-</button>
+    <button onclick="press('^2')" class="buttonSet">x²</button>
+    <button onclick="press(4)" class="buttonSet">4</button>
+    <button onclick="press(5)" class="buttonSet">5</button>
+    <button onclick="press(6)" class="buttonSet">6</button>
+    <button onclick="press('*')" class="buttonSet">*</button>
+    <button onclick="press('^3')" class ="buttonSet">x³</button>
+    <button onclick="press(1)" class="buttonSet">1</button>
+    <button onclick="press(2)" class="buttonSet">2</button>
+    <button onclick="press(3)" class="buttonSet">3</button>
+    <button onclick="press('/')" class="buttonSet">/</button>
+    <button onclick="press('^y')" class="buttonSet">x<sup>y</sup></button>
+    <button onclick="press('+/-')" class="buttonSet">+/-</button>
+    <button onclick="press(0)" class="buttonSet">0</button>
+    <button onclick="press('.')" class="buttonSet">.</button>
+    <button onclick="press('=')" class="buttonSet">=</button>
     <h1></h1>
     <div style="height: 5vh; grid-column: span 2;"></div>
     </div>
+    <h1 style='color=white;'>draggedButton</h1>
     <div class="ghostKeypad" id="kaypad">
       <button class="GhostButton" id="1.1"></button>
       <button class="GhostButton" id="1.2"></button>
@@ -279,7 +156,54 @@
       <button class="GhostButton" id="5.7"></button>
       <button class="GhostButton" id="5.8"></button>
       <button class="GhostButton" id="5.9"></button>`;
+    let potencialyDraggedButton = document.getElementsByClassName('buttonSet');
+    for (let i = 0; i < potencialyDraggedButton.length; i++) {
+      potencialyDraggedButton[i].addEventListener('mousedown', (event) => {
+        draggedButton = event.target;
+
+      });
+    }
+
+
+    for (let i = 0; i < potencialyDraggedButton.length; i++) {
+      potencialyDraggedButton[i].addEventListener('mousemove', (event) => {
+
+        if (draggedButton) {
+          // --- TRIK: Klonování pro podržení místa ---
+          // Vytvoříme kopii tlačítka
+          let clone = draggedButton.cloneNode(true);
+
+          // Nastavíme klonu speciální ID, abychom ho pak našli, a zneviditelníme ho
+          clone.id = 'drag-placeholder';
+          clone.style.visibility = 'hidden';
+
+          // Vložíme klon do mřížky přesně před původní tlačítko
+          draggedButton.parentNode.insertBefore(clone, draggedButton);
+          draggedButton.classList.add('inDrag');
+          draggedButton.classList.remove('buttonSet');
+
+
+          // Výpočet - bereme souřadnice z (event)
+          let x = event.clientX - (draggedButton.offsetWidth / 2);
+          let y = event.clientY - (draggedButton.offsetHeight / 2);
+
+          draggedButton.style.transform = `translate(${x}px, ${y}px)`;
+        }
+      });
+
+    };
+
+    window.addEventListener('mouseup', (event) => {
+      if (!draggedButton) return;
+      alert(event.target.classList);
+      draggedButton.classList.remove('inDrag');
+      draggedButton.classList.add('buttonSet');
+      draggedButton = null;
+    });
   }
+
+
+
   function press(char) {
     if ((!isNaN(char) && char !== null && char !== ' ') || char === '.') {
       document.getElementById('display').innerHTML += char;
@@ -403,6 +327,9 @@
       powerLayer = 0;
     }
   }
+
+
+
   function calculatorType(type) {
     if (type === 'basic') {
       document.getElementById('kaypad').innerHTML = `

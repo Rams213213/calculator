@@ -1,0 +1,136 @@
+  body,
+  html {
+    height: 100%;
+    overflow: hidden;
+    /* Zákaz scrollování celé stránky */
+  }
+
+  .button {
+    width: 15vh;
+    height: 12vh;
+    font-size: 40px;
+    color: rgb(0, 0, 0);
+    margin: 0.5vh;
+    background-color: rgb(255, 145, 0);
+    border-radius: 100px;
+    border: none;
+    align-items: center;
+  }
+
+  .button:active {
+    background-color: rgb(255, 175, 0);
+    transform: scale(1.05);
+  }
+
+  .buttonSet {
+    width: 13vh;
+    height: 10vh;
+    font-size: 40px;
+    color: rgb(0, 0, 0);
+    margin: 0.5vh;
+    background-color: rgb(255, 145, 0);
+    border-radius: 100px;
+    border: none;
+    align-items: center;
+    cursor: grab;
+  }
+
+  .buttonSet:active {
+    cursor: grabbing;
+  }
+
+  .GhostButton {
+    width: 15vh;
+    height: 12vh;
+    font-size: 40px;
+    color: rgb(255, 255, 255);
+    /* Barva textu (pokud tam nějaký bude) */
+    margin: 0.5vh;
+    background-color: transparent;
+    /* Průhledné pozadí */
+    border-radius: 100px;
+
+    /* OPRAVA: Musíš definovat tloušťku a styl, aby byl vidět */
+    border: 2px dashed rgb(105, 105, 105);
+
+    display: inline-flex;
+    justify-content: center;
+  }
+
+  .settingButton {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    height: 5vh;
+    width: 10vh;
+    color: black;
+    background-color: rgb(255, 145, 0);
+    font-size: 2vh;
+    border: none;
+    border-radius: 5px;
+  }
+
+  .grid {
+    display: grid;
+    /* Levý panel 35vh (dost pro 2 sloupce), pravý panel zbytek */
+    grid-template-columns: 1fr 1fr;
+    width: 35vh;
+    height: 100vh;
+    /* Omezíme výšku, aby fungoval scroll */
+    overflow-y: auto;
+    z-index: 2;
+    position: absolute;
+    padding: 1vh;
+  }
+
+  .text {
+    width: calc(100vw - 50px);
+    height: 27.5vh;
+    font-size: 15vh;
+    margin: 5px;
+    padding: 5px;
+    text-align: right;
+    border-radius: 5px;
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    white-space: nowrap;
+  }
+
+  .calculatorType {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    height: 30px;
+    background-color: rgb(255, 145, 0);
+    border: none;
+    border-radius: 5px;
+  }
+
+  .kaypad {
+    text-align: right;
+  }
+
+  .ghostKeypad {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    text-align: right;
+    z-index: 1;
+  }
+
+  h1 {
+    margin: 0;
+  }
+
+  .inDrag {
+    color: blue;
+    position: fixed;
+    z-index: 3;
+    background-color: rgb(255, 145, 0);
+    border-radius: 100px;
+    border: none;
+    align-items: center;
+    width: 13vh;
+    height: 10vh;
+    font-size: 40px;
+  }
